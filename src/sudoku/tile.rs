@@ -32,4 +32,6 @@ impl Tile {
             Tile::Variable(x) => x.clone(),
         }
     }
+
+    // TODO function to set value - should fail on fixed tiles - only valid values for variable
 }

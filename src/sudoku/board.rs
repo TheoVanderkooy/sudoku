@@ -1,5 +1,7 @@
 use super::Tile;
+use super::SudokuError;
 
+use std::ops::{Index, IndexMut};
 use std::num::NonZeroU8;
 
 
@@ -15,6 +17,28 @@ impl Board {
     /// Create an empty board 
     pub fn empty() -> Board {
         Board{tiles: [[Tile::variable(); 9]; 9]}
+    }
+
+    pub fn from_sparse(fixed_tiles: &Vec<(u8, u8, u8)>) -> Result<Board, SudokuError> {
+        let mut board = Board::empty();
+
+        for (x, y, v) in fixed_tiles {
+            if  x >= &9 {
+                return Err(SudokuError{msg: format!("invalid x value {}", x)});
+            } else if y >= &9 {
+                return Err(SudokuError{msg: format!("invalid y value {}", y)});
+            } else if v < &1 || v > &9 {
+                return Err(SudokuError{msg: format!("invalid tile value {}", v)});
+            }
+
+            let t = &mut board[*y][*x as usize];
+            match *t {
+                Tile::Fixed(_) => return Err(SudokuError{msg: format!("Multiple values specified for file ({}, {})", x, y)}),
+                Tile::Variable(_) => *t = Tile::fixed(*v),
+            }
+        }
+
+        Ok(board)
     }
 
 }
@@ -44,5 +68,19 @@ impl std::fmt::Display for Board {
         }
         
         std::result::Result::Ok(())
+    }
+}
+
+impl Index<u8> for Board {
+    type Output = [Tile; 9];
+
+    fn index(&self, index: u8) -> &Self::Output {
+        &self.tiles[index as usize]
+    }
+}
+
+impl IndexMut<u8> for Board {
+    fn index_mut(&mut self, index: u8) -> &mut Self::Output {
+        &mut self.tiles[index as usize]
     }
 }
