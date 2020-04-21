@@ -1,9 +1,9 @@
 
 #[cfg(test)]
 
+use ::sudoku::{Board};
 
-// use super::*;
-use crate::sudoku::Board;
+
 
 #[test]
 fn test_print_board() {

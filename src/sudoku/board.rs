@@ -2,7 +2,6 @@ use super::Tile;
 use super::SudokuError;
 
 use std::ops::{Index, IndexMut};
-use std::num::NonZeroU8;
 
 
 #[derive(Debug)]

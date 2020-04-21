@@ -1,4 +1,8 @@
+
+use super::SudokuError;
+
 use std::num::NonZeroU8;
+
 
 // TODO better doc comments
 // TODO tests?
@@ -33,5 +37,22 @@ impl Tile {
         }
     }
 
-    // TODO function to set value - should fail on fixed tiles - only valid values for variable
+    /// ```
+    /// let mut board = sudoku::Board::empty();
+    /// board[0][1].set(3);
+    /// assert!(board[0][1].get().filter(|v| v.get() == 3).is_some());
+    /// ```
+    pub fn set(&mut self, val: u8) -> Result<(), SudokuError> {
+        if val > 9 {
+            return Err(SudokuError{msg: format!("Invalid value for tile {}", val)});
+        }
+
+        match self {
+            Tile::Fixed(_) => Err(SudokuError{msg: "Cannot set value for a fixed value tile".to_string()}),
+            Tile::Variable(ref mut x) => {
+                *x = NonZeroU8::new(val);
+                Ok(())
+            }
+        }
+    }
 }
