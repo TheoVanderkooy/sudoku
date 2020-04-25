@@ -18,6 +18,15 @@ impl Board {
         Board{tiles: [[Tile::variable(); 9]; 9]}
     }
 
+    /// Reset all the variable tiles to empty
+    pub fn reset(&mut self) {
+        for r in &mut self.tiles {
+            for t in r {
+                t.set(0).ok();
+            }
+        }
+    }
+
     pub fn from_sparse(fixed_tiles: &Vec<(u8, u8, u8)>) -> Result<Board, SudokuError> {
         let mut board = Board::empty();
 
@@ -38,6 +47,15 @@ impl Board {
         }
 
         Ok(board)
+    }
+
+    pub fn check_row(r: u8) -> bool {
+        // TODO bitmap of the values
+
+        // TODO loop over the row and check if already set
+        
+
+        true
     }
 
 }

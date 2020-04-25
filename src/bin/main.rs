@@ -1,19 +1,12 @@
-use sudoku::*;
+use sudoku::{Board, SudokuError, SudokuGame};
+
 
 
 fn main() -> Result<(), SudokuError> {
+    let board = Board::from_sparse(&vec![(0, 0, 1), (2, 3, 2), (8, 8, 3)])?;
 
-    // debug printing
-    // println!("{}\n", Board::empty());
-
-    let mut board = Board::from_sparse(&vec![(0, 0, 1), (2, 3, 2), (8, 8, 3)])?;
-    // println!("{}\n", board);
-
-    board[1][1].set(4)?;
-    println!("{}\n", board);
-    board[1][1].set(0)?;
-    println!("{}\n", board);
-
+    let mut game = SudokuGame::new(board);
+    game.start();
 
     Ok(())
 }
